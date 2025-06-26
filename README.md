@@ -1,3 +1,49 @@
+# pydomino-prebuilt
+
+[![PyPI](https://img.shields.io/pypi/v/pydomino-prebuilt.svg)](https://pypi.python.org/pypi/pydomino-prebuilt)
+[![Build and Publish Wheels](https://github.com/tsukumijima/pydomino-prebuilt/actions/workflows/build-wheels.yml/badge.svg)](https://github.com/tsukumijima/pydomino-prebuilt/actions/workflows/build-wheels.yml)
+[![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](LICENSE.md)
+
+pydomino-prebuilt は、[pydomino](https://github.com/DwangoMediaVillage/pydomino) の事前ビルド済み wheels を PyPI に公開することを目的とした、[pydomino](https://github.com/DwangoMediaVillage/pydomino) の派生ライブラリです。
+
+## Changes in this fork
+
+- **パッケージ名を `pydomino-prebuilt` に変更**
+  - ライブラリ名は `pydomino` から変更されておらず、[pydomino](https://github.com/DwangoMediaVillage/pydomino) 本家同様に `import pydomino` でインポートできる
+  - [pydomino](https://github.com/DwangoMediaVillage/pydomino) 本家のドロップイン代替として利用できる
+- **Windows・macOS (x64 / arm64)・Linux すべての事前ビルド済み wheels を PyPI に公開**
+  - pydomino は C++ や CMake 、サブモジュールに依存しており、ビルド環境の構築難易度が比較的高い上に、PyPI には公開されていない
+    - 特に Windows においては MSVC のインストールが必要となる
+  - 事前ビルド済みの wheels を PyPI に公開することで、ビルド環境のない PC でも簡単にインストール可能にすることを意図している
+- **明示的に Python 3.11 / 3.12 / 3.13 をサポート対象に追加**
+- **ONNX モデルを Wheel に同梱**
+  - 学習済みモデル `phoneme_transition_model.onnx` は Wheel パッケージに同梱されており、pydomino-prebuilt と同時にインストールされる
+  - これにより、利用者が毎回モデルファイルをダウンロードしたり、ファイルパスを指定する必要がなくなった
+- **Python API の使いやすさを向上**
+  - `pydomino.Aligner()` のコンストラクタで `onnxfile` パラメータを省略可能に変更した
+  - パラメータが `None` の場合、自動的に内蔵の学習済みモデルが利用される
+  - 従来通り、カスタムモデルのパス指定も可能
+- **CLI の使いやすさを向上**
+  - `domino` コマンドで `--onnx_path` オプションを省略可能に変更した
+  - オプションが指定されていない場合、自動的に内蔵の学習済みモデルが利用される
+  - Python ラッパー側でデフォルトモデルパスを自動挿入することで、クロスプラットフォーム対応を維持した
+- **パッケージメタデータの整理**
+  - `pyproject.toml` にプロジェクトメタデータを統合し、現代的な Python パッケージ標準に準拠した
+  - 適切な classifiers を追加して、対応 OS・Python バージョン・ライセンス情報などを明示した
+
+## Installation
+
+下記コマンドを実行して、ライブラリをインストールできます。
+
+```bash
+pip install pydomino-prebuilt
+```
+
+下記ならびに [docs/](docs/) 以下のドキュメントは、[pydomino](https://github.com/DwangoMediaVillage/pydomino) 本家のドキュメントを改変なしでそのまま引き継いでいます。  
+これらのドキュメントの内容が pydomino-prebuilt にも通用するかは保証されません。
+
+-------
+
 # pydomino
 
 `pydomino` は日本語音声に対して音素ラベルをアラインメントするためのツールです。GPUは不要です。

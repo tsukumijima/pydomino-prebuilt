@@ -1,5 +1,5 @@
 [project]
-name = "pydomino"
+name = "pydomino-prebuilt"
 version = "1.2.0"
 description = "16kHz モノラル音声に対して指定した音素をアライメントするライブラリ"
 dependencies = []
@@ -26,8 +26,8 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/DwangoMediaVillage/pydomino"
-Repository = "https://github.com/DwangoMediaVillage/pydomino"
+Homepage = "https://github.com/tsukumijima/pydomino-prebuilt"
+Repository = "https://github.com/tsukumijima/pydomino-prebuilt"
 Documentation = "https://dwangomediavillage.github.io/pydomino/"
 
 [build-system]
