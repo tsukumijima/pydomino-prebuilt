@@ -16,10 +16,14 @@ if(MSVC)
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
     set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
-    set(CMAKE_CXX_FLAGS_RELEASE  "${CMAKE_CXX_FLAGS_RELEASE} /MT")
+    set(CMAKE_CXX_FLAGS_RELEASE  "${CMAKE_CXX_FLAGS_RELEASE} /MT /O2")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
+    # サイズ最適化オプション
+    set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /OPT:REF /OPT:ICF")
+    set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /OPT:REF /OPT:ICF")
 else(MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -s")
 endif(MSVC)
 
 #依存ライブラリを追加
@@ -46,7 +50,23 @@ pybind11_add_module(
     src/phoneme_transition.cpp
     src/viterbi.cpp
 )
-file(COPY ${FETCHCONTENT_BASE_DIR} DESTINATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+# 実行時に必要な動的ライブラリのみコピー（ファイルサイズ削減のため）
+if (WIN32)
+    # Windows では DLL のみコピー
+    file(GLOB ONNX_RUNTIME_DLLS "${FETCHCONTENT_BASE_DIR}/onnxruntime-src/lib/*.dll")
+    file(COPY ${ONNX_RUNTIME_DLLS} DESTINATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/_deps/onnxruntime-src/lib)
+    file(MAKE_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/_deps/onnxruntime-src)
+elseif(APPLE)
+    # macOS では .dylib のみコピー
+    file(GLOB ONNX_RUNTIME_DYLIBS "${FETCHCONTENT_BASE_DIR}/onnxruntime-src/lib/*.dylib")
+    file(COPY ${ONNX_RUNTIME_DYLIBS} DESTINATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/_deps/onnxruntime-src/lib)
+    file(MAKE_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/_deps/onnxruntime-src)
+else()
+    # Linux では .so ファイルのみコピー
+    file(GLOB ONNX_RUNTIME_SOS "${FETCHCONTENT_BASE_DIR}/onnxruntime-src/lib/*.so*")
+    file(COPY ${ONNX_RUNTIME_SOS} DESTINATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/_deps/onnxruntime-src/lib)
+    file(MAKE_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/_deps/onnxruntime-src)
+endif()
 target_link_libraries(
     pydomino_cpp
     PRIVATE onnxruntime

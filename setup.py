@@ -113,9 +113,14 @@ setup(
     ext_modules=[CMakeExtension("pydomino.pydomino_cpp")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
-    packages=find_packages(),
+    packages=find_packages(include=['pydomino', 'pydomino.*']),
     package_data={
-        "pydomino": ["onnx_model/*.onnx"],
+        "pydomino": [
+            "onnx_model/*.onnx",
+            "*.dll",  # Windows
+            "*.dylib",  # macOS
+            "*.so*",  # Linux
+        ],
     },
     include_package_data=True,
 )
