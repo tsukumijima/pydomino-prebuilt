@@ -83,7 +83,7 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
         BUILD_WITH_INSTALL_RPATH TRUE
     )
 endif()
-    
+
 target_link_directories(domino PRIVATE ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/_deps/onnxruntime-src/lib)
 
 install(TARGETS domino
