@@ -110,13 +110,6 @@ class CMakeBuild(build_ext):
 # The information here can also be placed in setup.cfg - better separation of
 # logic and declaration, and simpler if you include description/version in a file.
 setup(
-    name="pydomino_cpp",
-    version="1.2.0",
-    url="https://github.com/DwangoMediaVillage/pydomino",
-    author="DWANGO Co., Ltd.",
-    author_email="shun_ueda@dwango.co.jp",
-    description="16kHz モノラル音声に対して指定した音素をアライメントするライブラリ",
-    long_description="",
     ext_modules=[CMakeExtension("pydomino.pydomino_cpp")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
