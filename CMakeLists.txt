@@ -50,21 +50,24 @@ pybind11_add_module(
     src/phoneme_transition.cpp
     src/viterbi.cpp
 )
-# 実行時に必要な動的ライブラリのみコピー（ファイルサイズ削減のため）
+# ビルド時に必要なファイルをコピー（最終パッケージのフィルタリングは setup.py で実行）
 if (WIN32)
-    # Windows では DLL のみコピー
+    # Windows では .dll と .lib をコピー
     file(GLOB ONNX_RUNTIME_DLLS "${FETCHCONTENT_BASE_DIR}/onnxruntime-src/lib/*.dll")
-    file(COPY ${ONNX_RUNTIME_DLLS} DESTINATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/_deps/onnxruntime-src/lib)
+    file(GLOB ONNX_RUNTIME_LIBS "${FETCHCONTENT_BASE_DIR}/onnxruntime-src/lib/*.lib")
+    file(COPY ${ONNX_RUNTIME_DLLS} ${ONNX_RUNTIME_LIBS} DESTINATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/_deps/onnxruntime-src/lib)
     file(MAKE_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/_deps/onnxruntime-src)
 elseif(APPLE)
-    # macOS では .dylib のみコピー
+    # macOS では .dylib と .a をコピー
     file(GLOB ONNX_RUNTIME_DYLIBS "${FETCHCONTENT_BASE_DIR}/onnxruntime-src/lib/*.dylib")
-    file(COPY ${ONNX_RUNTIME_DYLIBS} DESTINATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/_deps/onnxruntime-src/lib)
+    file(GLOB ONNX_RUNTIME_LIBS "${FETCHCONTENT_BASE_DIR}/onnxruntime-src/lib/*.a")
+    file(COPY ${ONNX_RUNTIME_DYLIBS} ${ONNX_RUNTIME_LIBS} DESTINATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/_deps/onnxruntime-src/lib)
     file(MAKE_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/_deps/onnxruntime-src)
 else()
-    # Linux では .so ファイルのみコピー
+    # Linux では .so と .a ファイルをコピー
     file(GLOB ONNX_RUNTIME_SOS "${FETCHCONTENT_BASE_DIR}/onnxruntime-src/lib/*.so*")
-    file(COPY ${ONNX_RUNTIME_SOS} DESTINATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/_deps/onnxruntime-src/lib)
+    file(GLOB ONNX_RUNTIME_LIBS "${FETCHCONTENT_BASE_DIR}/onnxruntime-src/lib/*.a")
+    file(COPY ${ONNX_RUNTIME_SOS} ${ONNX_RUNTIME_LIBS} DESTINATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/_deps/onnxruntime-src/lib)
     file(MAKE_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/_deps/onnxruntime-src)
 endif()
 target_link_libraries(
