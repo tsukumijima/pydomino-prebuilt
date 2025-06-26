@@ -1,2 +1,3 @@
 build/
-pydomino.egg-info/
+pydomino_prebuilt.egg-info/
+__pycache__/
