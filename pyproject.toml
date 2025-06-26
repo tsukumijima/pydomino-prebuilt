@@ -1,6 +1,6 @@
 [project]
 name = "pydomino-prebuilt"
-version = "1.2.0"
+version = "1.2.0-post1"
 description = "16kHz モノラル音声に対して指定した音素をアライメントするライブラリ"
 dependencies = []
 requires-python = ">= 3.10"
