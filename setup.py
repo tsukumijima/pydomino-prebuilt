@@ -121,4 +121,8 @@ setup(
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
     packages=find_packages(),
+    package_data={
+        "pydomino": ["onnx_model/*.onnx"],
+    },
+    include_package_data=True,
 )
