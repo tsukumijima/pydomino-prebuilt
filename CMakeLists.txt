@@ -7,6 +7,10 @@ endif(WIN32)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Set macOS deployment target to support std::filesystem
+if(APPLE)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "13.0")
+endif()
 
 if(MSVC)
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)

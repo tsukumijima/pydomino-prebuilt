@@ -3,6 +3,7 @@ name = "pydomino"
 version = "1.2.0"
 dependencies = []
 requires-python = ">= 3.10"
+dynamic = ["description", "authors"]
 
 [build-system]
 requires = ["setuptools", "wheel", "numpy"]

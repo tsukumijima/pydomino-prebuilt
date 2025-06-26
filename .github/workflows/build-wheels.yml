@@ -56,6 +56,7 @@ jobs:
           CIBW_TEST_SKIP: "*-win_arm64"
           CIBW_SKIP: pp* *-musllinux*
           CIBW_PROJECT_REQUIRES_PYTHON: ">=3.10"
+          CIBW_ENVIRONMENT_MACOS: MACOSX_DEPLOYMENT_TARGET=13.0
 
       - uses: actions/upload-artifact@v4
         with:
