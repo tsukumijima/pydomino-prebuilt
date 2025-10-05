@@ -1,9 +1,8 @@
 import numpy as np
 from pathlib import Path
-from pydomino.pydomino_cpp import Aligner_cpp
 
 
-class Aligner(Aligner_cpp):
+class Aligner:
     def __init__(self, onnxfile: str | None = None) -> None:
         """
         コンストラクタ。ここで `onnxfile` で指定した ONNX ファイルを読み込む。
