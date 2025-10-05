@@ -54,8 +54,8 @@ jobs:
           CIBW_ARCHS_WINDOWS: ${{ contains(matrix.os, 'windows') && join(matrix.archs, ' ') || 'AMD64' }}
           CIBW_ARCHS_MACOS: ${{ (contains(matrix.os, 'macos') && join(matrix.archs, ' ')) || 'x86_64' }}
           CIBW_TEST_SKIP: "*-win_arm64"
-          CIBW_SKIP: pp* *-musllinux*
-          CIBW_PROJECT_REQUIRES_PYTHON: ">=3.10"
+          CIBW_SKIP: pp* *-musllinux* cp314-*
+          CIBW_PROJECT_REQUIRES_PYTHON: ">=3.10,<3.14"
           CIBW_ENVIRONMENT_MACOS: MACOSX_DEPLOYMENT_TARGET=13.0
 
       - uses: actions/upload-artifact@v4
