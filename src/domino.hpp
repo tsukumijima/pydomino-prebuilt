@@ -3,7 +3,9 @@
 #include <onnxruntime_cxx_api.h>
 
 #include <Eigen/Core>
+#include <cstdint>
 #include <filesystem>
+#include <mutex>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -36,5 +38,14 @@ class Aligner {
 
   int const N_;
   PhonemeTransitionTokenizer tokenizer = PhonemeTransitionTokenizer();
+
+  // 同じ音声を別の音素列で何度もアライメントする呼び出し方に備え、直前の音声と音響モデルの出力を保持する
+  // 音響モデルの出力は音声だけで決まり、音素列は後段の Viterbi にしか使われないため、音声が一致すれば出力を再利用できる
+  std::mutex cache_mutex_;
+  std::vector<float> cached_wav_;
+  std::vector<float> cached_transition_logprobs_;
+  std::vector<float> cached_blank_logprobs_;
+  std::int64_t cached_num_timeframe_ = 0;
+  std::int64_t cached_num_transition_ = 0;
 };
 }  // namespace domino
